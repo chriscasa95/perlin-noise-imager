@@ -8,16 +8,18 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+	string VERSION = "v0.1";
+	string filename = "perlin_noise";
 
 	// Define the size of the image
 	unsigned int factor = 5;
 	unsigned int width = 600, height = 450;
 
 	int contour_lines = 10;
-	int zoom = 3;
+	float zoom = 1.0;
 	float seed = 0.0;
-	bool normalize = false;
-	int red = 50, green = 100, blue = 180;
+	bool normalize = true;
+	int red = 255, green = 255, blue = 255;
 
 	// Commandline arguments
 	for (int count = 0; count < argc; count++)
@@ -28,18 +30,29 @@ int main(int argc, char *argv[])
 		{
 			cout << "Options:" << endl
 				 << "-h | --help       \tPrint this help" << endl
-				 << "-f | --factor     \tMultiply image resolution (default: " << factor << ")" << endl
+				 << "-v | --version    \tPrint version" << endl
+				 << "-o | --output     \tChange Filename (default: " << filename << ")" << endl
+				 << "-f | --factor     \tMultiply image resolution by factor (default: " << factor << ")" << endl
 				 << "-w | --width      \tImage width in pixel (default: " << width << ")" << endl
 				 << "-h | --height     \tImage height in pixel (default: " << height << ")" << endl
-				 << "-z | --zoom       \tZoom in / Zoom out of picture (default: " << zoom << ")" << endl
+				 << "-z | --zoom       \tZoom in / Zoom out of perlin noise picture [float] (default: " << zoom << ")" << endl
 				 << "-c | --contour    \tFactor for altitude of perlin noise (default: " << contour_lines << ")" << endl
 				 << "-s | --seed       \tSeed for perlin noise randomness [float] (default: " << seed << ")" << endl
-				 << "-n | --normalize  \tNormalize perlin noise [0,1] (default: " << normalize << ")" << endl
+				 << "-n | --normalize  \tToggle perlin noise normalization (default: " << normalize << ")" << endl
 				 << "-r | --red        \tRed value [0,...,255] (default: " << red << ")" << endl
 				 << "-g | --green      \tGreen value [0,...,255] (default: " << green << ")" << endl
 				 << "-b | --blue  	   \tBlue value [0,...,255] (default: " << blue << ")" << endl;
 
 			return 0;
+		}
+		if (input.compare("-v") == 0 || input.compare("--version") == 0)
+		{
+			cout << "perlin noise imager " << VERSION << endl;
+			return 0;
+		}
+		if (input.compare("-o") == 0 || input.compare("--output") == 0)
+		{
+			filename = argv[count + 1];
 		}
 		if (input.compare("-f") == 0 || input.compare("--factor") == 0)
 		{
@@ -67,7 +80,7 @@ int main(int argc, char *argv[])
 		}
 		if (input.compare("-n") == 0 || input.compare("--normalize") == 0)
 		{
-			normalize = stoi(argv[count + 1]);
+			normalize = !normalize;
 		}
 		if (input.compare("-r") == 0 || input.compare("--red") == 0)
 		{
@@ -81,6 +94,12 @@ int main(int argc, char *argv[])
 		{
 			blue = stoi(argv[count + 1]);
 		}
+	}
+
+	if (width == 0 || height == 0 || factor == 0 || contour_lines == 0)
+	{
+		cout << "ERROR: value not allowed!" << endl;
+		return 1;
 	}
 
 	// Create an empty PPM image
@@ -119,7 +138,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Save the image in a binary PPM file
-	image.write("perlin_noise.ppm");
+	image.write(filename + ".ppm");
 
 	cout << "Crated perlin noise image with:\n"
 		 << endl
@@ -129,7 +148,8 @@ int main(int argc, char *argv[])
 		 << "\t\tZoom factor: " << zoom << endl
 		 << "\t\tAltitude facor: " << contour_lines << endl
 		 << "\t\tSeed: " << seed << endl
-		 << "\t\tNormilazation: " << normalize << endl;
+		 << "\t\tNormalization: " << normalize << endl
+		 << "\nSee options with -h" << endl;
 
 	return 0;
 }
