@@ -1,17 +1,21 @@
 # Perlin Noise Imager
 
+![Release](https://badgen.net/github/release/chriscasa95/perlin-noise-images)
+![license](https://badgen.net/github/license/chriscasa95/perlin-noise-images)
+
+
 This is a small program to create fancy images with the Perlin Noise funktion.
 
 It is a commandline interface around sol-prog's [Perlin Noise implementation in c++](https://github.com/sol-prog/Perlin_Noise). For more informations visit this [Website](http://solarianprogrammer.com/2012/07/18/perlin-noise-cpp-11/).
 
-Just download the binaries or build it yourself and open the resulting `.ppm` file for example with [GIMP](https://www.gimp.org/). 
+Just [download the binaries](https://github.com/chriscasa95/perlin-noise-images/releases/) or build it yourself and open the resulting `.ppm` file for example with [GIMP](https://www.gimp.org/). 
 
 ![image info](./images/example0.png)
 ![image info](./images/example1.png)
 ![image info](./images/example2.png)
 ![image info](./images/example3.png)
 
-## Commandline Inputs
+# Commandline Inputs
 
 Use `pn_image` on Linux and `pn_image.exe` on Windows. 
 
@@ -32,43 +36,43 @@ Use `pn_image` on Linux and `pn_image.exe` on Windows.
     -g | --green            Green value [0,...,255] (default: 255)
     -b | --blue             Blue value [0,...,255] (default: 255)
 
-# Default
+## Default
 
     ./pn_image
 
 ![image info](./images/default.png)
 
-# Zoom out
+## Zoom out
 
     ./pn_image -z 3
 
 ![image info](./images/zoom_out.png)
 
-# Change color
+## Change color
 
     ./pn_image -r 50 -b 120 -g 170
 
 ![image info](./images/change_color.png)
 
-# Disable Perlin Noise value normalizing with color
+## Disable Perlin Noise value normalizing with color
 
     ./pn_image -n -r 50 -b 120 -g 170
 
 ![image info](images/change_color_no_normalization.png)
 
-# Change Perlin Noise random seed
+## Change Perlin Noise random seed
 
     ./pn_image -s 2
 
 ![image info](images/change_seed.png)
 
-# Add more "altitude"
+## Add more "altitude"
 
     ./pn_image -c 20
 
 ![image info](images/change_altitude.png)
 
-# Everything together
+## Everything together
 
     ./pn_image -z 3 -n -r 50 -b 120 -g 170 -s 2 -c 20
 

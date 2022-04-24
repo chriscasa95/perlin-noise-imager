@@ -1,3 +1,3 @@
 make
 
-./pn_image
+./pn_imager
