@@ -13,7 +13,7 @@ Just download the binaries or build it yourself and open the resulting `.ppm` fi
 
 ## Commandline Inputs
 
-Use `pn_image` for Linux and `pn_image.exe` for Windows. 
+Use `pn_image` on Linux and `pn_image.exe` on Windows. 
 
     $ ./pn_image -h
 

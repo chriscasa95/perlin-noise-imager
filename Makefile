@@ -9,14 +9,14 @@ INC=./src/*
 
 # linux
 .PHONY: default
-default: pn_image
-pn_image:
+default: pn_imager
+pn_imager:
 	$(CC) $(INC) $(CFLAGS) -o $@ $^
 
 # windows
 .PHONY: windows
-windows: pn_image.exe
-pn_image.exe:
+windows: pn_imager.exe
+pn_imager.exe:
 	$(MINGW) -o $@ $^ ${INC}
 
 # both
@@ -26,4 +26,4 @@ all: default windows
 # clean
 .PHONY: clean
 clean:
-	rm -f pn_image *.exe *.ppm 
+	rm -f pn_imager *.exe *.ppm 
