@@ -1,7 +1,7 @@
 # variables
 
 CC=g++
-MINGW=x86_64-w64-mingw32-g++
+MINGW=x86_64-w64-mingw32-g++ -static-libgcc -static-libstdc++
 
 CFLAGS=-O3 -g 
 
@@ -9,8 +9,8 @@ INC=PerlinDemo_00.cpp PerlinNoise.cpp PerlinNoise.h ppm.cpp ppm.h
 
 # linux
 .PHONY: default
-default: pn_image.bin
-pn_image.bin:
+default: pn_image
+pn_image:
 	$(CC) $(INC) $(CFLAGS) -o $@ $^
 
 # windows
@@ -21,7 +21,7 @@ pn_image.exe:
 
 # both
 .PHONY: all 
-all: pn_image.bin pn_image.exe
+all: default windows
 
 # clean
 .PHONY: clean

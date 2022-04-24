@@ -1,3 +1,1 @@
-make
-
-./pn_image.bin
+./pn_image

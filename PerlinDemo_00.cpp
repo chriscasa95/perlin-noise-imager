@@ -5,7 +5,8 @@
 int main()
 {
 	// Define the size of the image
-	unsigned int width = 600, height = 450;
+	unsigned int multi = 5;
+	unsigned int width = multi * 600, height = multi * 450;
 
 	// Create an empty PPM image
 	ppm image(width, height);
@@ -22,24 +23,28 @@ int main()
 			double x = (double)j / ((double)width);
 			double y = (double)i / ((double)height);
 
-			// Typical Perlin noise
-			double n = pn.noise(10 * x, 10 * y, 0.8);
+			double n;
+
+			int contour_lines = 10;
+			int zoom = 3;
+			float seed = 0; // 0
 
 			// Wood like structure
-			n = 20 * pn.noise(x, y, 0.8);
+			n = contour_lines * pn.noise(zoom * x, zoom * y, seed);
+			// Round float to lower integer
 			n = n - floor(n);
 
 			// Map the values to the [0, 255] interval, for simplicity we use
 			// tones of grey
-			image.r[kk] = floor(255 * n);
-			image.g[kk] = floor(255 * n);
-			image.b[kk] = floor(255 * n);
+			image.r[kk] = floor(50 * n);  // 180
+			image.g[kk] = floor(100 * n); // 100
+			image.b[kk] = floor(180 * n); // 50
 			kk++;
 		}
 	}
 
 	// Save the image in a binary PPM file
-	image.write("figure_8_R.ppm");
+	image.write("perlin_noise.ppm");
 
 	return 0;
 }
