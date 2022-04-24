@@ -1,14 +1,91 @@
 #include <cmath>
+#include <iostream>
+#include <string>
 #include "ppm.h"
 #include "PerlinNoise.h"
 
-int main()
+using namespace std;
+
+int main(int argc, char *argv[])
 {
+
 	// Define the size of the image
-	unsigned int multi = 5;
-	unsigned int width = multi * 600, height = multi * 450;
+	unsigned int factor = 5;
+	unsigned int width = 600, height = 450;
+
+	int contour_lines = 10;
+	int zoom = 3;
+	float seed = 0.0;
+	bool normalize = false;
+	int red = 50, green = 100, blue = 180;
+
+	// Commandline arguments
+	for (int count = 0; count < argc; count++)
+	{
+		string input = argv[count];
+
+		if (input.compare("-h") == 0 || input.compare("--help") == 0)
+		{
+			cout << "Options:" << endl
+				 << "-h | --help       \tPrint this help" << endl
+				 << "-f | --factor     \tMultiply image resolution (default: " << factor << ")" << endl
+				 << "-w | --width      \tImage width in pixel (default: " << width << ")" << endl
+				 << "-h | --height     \tImage height in pixel (default: " << height << ")" << endl
+				 << "-z | --zoom       \tZoom in / Zoom out of picture (default: " << zoom << ")" << endl
+				 << "-c | --contour    \tFactor for altitude of perlin noise (default: " << contour_lines << ")" << endl
+				 << "-s | --seed       \tSeed for perlin noise randomness [float] (default: " << seed << ")" << endl
+				 << "-n | --normalize  \tNormalize perlin noise [0,1] (default: " << normalize << ")" << endl
+				 << "-r | --red        \tRed value [0,...,255] (default: " << red << ")" << endl
+				 << "-g | --green      \tGreen value [0,...,255] (default: " << green << ")" << endl
+				 << "-b | --blue  	   \tBlue value [0,...,255] (default: " << blue << ")" << endl;
+
+			return 0;
+		}
+		if (input.compare("-f") == 0 || input.compare("--factor") == 0)
+		{
+			factor = stoi(argv[count + 1]);
+		}
+		if (input.compare("-w") == 0 || input.compare("--width") == 0)
+		{
+			width = stoi(argv[count + 1]);
+		}
+		if (input.compare("-h") == 0 || input.compare("--height") == 0)
+		{
+			height = stoi(argv[count + 1]);
+		}
+		if (input.compare("-z") == 0 || input.compare("--zoom") == 0)
+		{
+			zoom = stoi(argv[count + 1]);
+		}
+		if (input.compare("-c") == 0 || input.compare("--contour") == 0)
+		{
+			contour_lines = stoi(argv[count + 1]);
+		}
+		if (input.compare("-s") == 0 || input.compare("--seed") == 0)
+		{
+			seed = stof(argv[count + 1]);
+		}
+		if (input.compare("-n") == 0 || input.compare("--normalize") == 0)
+		{
+			normalize = stoi(argv[count + 1]);
+		}
+		if (input.compare("-r") == 0 || input.compare("--red") == 0)
+		{
+			red = stoi(argv[count + 1]);
+		}
+		if (input.compare("-g") == 0 || input.compare("--green") == 0)
+		{
+			green = stoi(argv[count + 1]);
+		}
+		if (input.compare("-b") == 0 || input.compare("--blue") == 0)
+		{
+			blue = stoi(argv[count + 1]);
+		}
+	}
 
 	// Create an empty PPM image
+	width *= factor;
+	height *= factor;
 	ppm image(width, height);
 
 	// Create a PerlinNoise object with the reference permutation vector
@@ -25,26 +102,34 @@ int main()
 
 			double n;
 
-			int contour_lines = 10;
-			int zoom = 3;
-			float seed = 0; // 0
-
 			// Wood like structure
 			n = contour_lines * pn.noise(zoom * x, zoom * y, seed);
 			// Round float to lower integer
-			n = n - floor(n);
+
+			if (normalize)
+				n = n - floor(n);
 
 			// Map the values to the [0, 255] interval, for simplicity we use
 			// tones of grey
-			image.r[kk] = floor(50 * n);  // 180
-			image.g[kk] = floor(100 * n); // 100
-			image.b[kk] = floor(180 * n); // 50
+			image.r[kk] = floor(red * n);	// 180
+			image.g[kk] = floor(green * n); // 100
+			image.b[kk] = floor(blue * n);	// 50
 			kk++;
 		}
 	}
 
 	// Save the image in a binary PPM file
 	image.write("perlin_noise.ppm");
+
+	cout << "Crated perlin noise image with:\n"
+		 << endl
+		 << "Image size in pixel: \t" << width << " x " << height << endl
+		 << "Color weighting: \tred[" << red << "/255]\tgreen[" << green << "/255]\tblue[" << blue << "/255]" << endl
+		 << "Perlin noise options:" << endl
+		 << "\t\tZoom factor: " << zoom << endl
+		 << "\t\tAltitude facor: " << contour_lines << endl
+		 << "\t\tSeed: " << seed << endl
+		 << "\t\tNormilazation: " << normalize << endl;
 
 	return 0;
 }
