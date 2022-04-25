@@ -4,7 +4,7 @@
 ![license](https://badgen.net/github/license/chriscasa95/perlin-noise-images)
 
 
-This is a small program to create fancy images with the Perlin Noise funktion.
+This is a small program to create fancy images with the Perlin Noise function.
 
 It is a commandline interface around sol-prog's [Perlin Noise implementation in c++](https://github.com/sol-prog/Perlin_Noise). For more informations visit this [Website](http://solarianprogrammer.com/2012/07/18/perlin-noise-cpp-11/).
 
