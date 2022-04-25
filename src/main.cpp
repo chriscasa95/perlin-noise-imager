@@ -3,12 +3,14 @@
 #include <string>
 #include "ppm.h"
 #include "PerlinNoise.h"
+#include "progressbar.h"
 
 using namespace std;
 
+#define VERSION "v0.15"
+
 int main(int argc, char *argv[])
 {
-	string VERSION = "v0.1";
 	string filename = "perlin_noise";
 
 	// Define the size of the image
@@ -50,47 +52,47 @@ int main(int argc, char *argv[])
 			cout << "perlin noise imager " << VERSION << endl;
 			return 0;
 		}
-		if (input.compare("-o") == 0 || input.compare("--output") == 0)
+		else if (input.compare("-o") == 0 || input.compare("--output") == 0)
 		{
 			filename = argv[count + 1];
 		}
-		if (input.compare("-f") == 0 || input.compare("--factor") == 0)
+		else if (input.compare("-f") == 0 || input.compare("--factor") == 0)
 		{
 			factor = stoi(argv[count + 1]);
 		}
-		if (input.compare("-w") == 0 || input.compare("--width") == 0)
+		else if (input.compare("-w") == 0 || input.compare("--width") == 0)
 		{
 			width = stoi(argv[count + 1]);
 		}
-		if (input.compare("-h") == 0 || input.compare("--height") == 0)
+		else if (input.compare("-h") == 0 || input.compare("--height") == 0)
 		{
 			height = stoi(argv[count + 1]);
 		}
-		if (input.compare("-z") == 0 || input.compare("--zoom") == 0)
+		else if (input.compare("-z") == 0 || input.compare("--zoom") == 0)
 		{
 			zoom = stoi(argv[count + 1]);
 		}
-		if (input.compare("-c") == 0 || input.compare("--contour") == 0)
+		else if (input.compare("-c") == 0 || input.compare("--contour") == 0)
 		{
 			contour_lines = stoi(argv[count + 1]);
 		}
-		if (input.compare("-s") == 0 || input.compare("--seed") == 0)
+		else if (input.compare("-s") == 0 || input.compare("--seed") == 0)
 		{
 			seed = stof(argv[count + 1]);
 		}
-		if (input.compare("-n") == 0 || input.compare("--normalize") == 0)
+		else if (input.compare("-n") == 0 || input.compare("--normalize") == 0)
 		{
 			normalize = !normalize;
 		}
-		if (input.compare("-r") == 0 || input.compare("--red") == 0)
+		else if (input.compare("-r") == 0 || input.compare("--red") == 0)
 		{
 			red = stoi(argv[count + 1]);
 		}
-		if (input.compare("-g") == 0 || input.compare("--green") == 0)
+		else if (input.compare("-g") == 0 || input.compare("--green") == 0)
 		{
 			green = stoi(argv[count + 1]);
 		}
-		if (input.compare("-b") == 0 || input.compare("--blue") == 0)
+		else if (input.compare("-b") == 0 || input.compare("--blue") == 0)
 		{
 			blue = stoi(argv[count + 1]);
 		}
@@ -111,6 +113,7 @@ int main(int argc, char *argv[])
 	PerlinNoise pn;
 
 	unsigned int kk = 0;
+	unsigned long total_pixel_count = width * height;
 	// Visit every pixel of the image and assign a color generated with Perlin noise
 	for (unsigned int i = 0; i < height; ++i)
 	{ // y
@@ -135,12 +138,15 @@ int main(int argc, char *argv[])
 			image.b[kk] = floor(blue * n);	// 50
 			kk++;
 		}
+
+		if (kk % 100000 == 0)
+			printProgress(0.5 * (double)kk / (double)total_pixel_count);
 	}
 
 	// Save the image in a binary PPM file
 	image.write(filename + ".ppm");
 
-	cout << "Crated perlin noise image with:\n"
+	cout << "\nCrated perlin noise image with:\n"
 		 << endl
 		 << "Image size in pixel: \t" << width << " x " << height << endl
 		 << "Color weighting: \tred[" << red << "/255]\tgreen[" << green << "/255]\tblue[" << blue << "/255]" << endl

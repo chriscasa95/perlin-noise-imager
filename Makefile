@@ -17,7 +17,7 @@ pn_imager:
 .PHONY: windows
 windows: pn_imager.exe
 pn_imager.exe:
-	$(MINGW) -o $@ $^ ${INC}
+	$(MINGW) ${CFLAGS} -o $@ $^ ${INC}
 
 # both
 .PHONY: all 

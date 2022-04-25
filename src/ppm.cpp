@@ -4,6 +4,7 @@
 #include <exception>
 
 #include "ppm.h"
+#include "progressbar.h"
 
 // init with default values
 
@@ -139,7 +140,11 @@ void ppm::write(const std::string &fname)
             inp.write(&aux, 1);
             aux = (char)b[i];
             inp.write(&aux, 1);
+
+            if (i % 1000000 == 0)
+                printProgress(0.5 + 0.5 * (double)i / (double)size);
         }
+        printProgress(1);
     }
     else
     {
